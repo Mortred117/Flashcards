@@ -6,15 +6,19 @@ interface DeckListProps {
   onSelectDeck: (deck: Deck) => void;
   onEditDeck: (deck: Deck) => void;
   onDeleteDeck: (deckId: string) => void;
+  onAddDeck: () => void;
 }
 
-const DeckList: React.FC<DeckListProps> = ({ decks, onSelectDeck, onEditDeck, onDeleteDeck }) => {
+const DeckList: React.FC<DeckListProps> = ({ decks, onSelectDeck, onEditDeck, onDeleteDeck, onAddDeck }) => {
   if (decks.length === 0) {
     return (
       <div className="empty-state">
         <div className="empty-icon">📚</div>
         <h3>Nenhum baralho encontrado</h3>
         <p>Crie seu primeiro baralho de flashcards para começar a estudar!</p>
+        <button className="btn primary" onClick={onAddDeck} style={{marginTop: '20px'}}>
+            Criar Novo Deck
+        </button>
       </div>
     );
   }

@@ -23,6 +23,20 @@ const Flashcard: React.FC<FlashcardProps> = ({ card, onAnswer, isFlipped, onFlip
     onAnswer(isCorrect);
   };
 
+  // Função utilitária para contar linhas
+  function getLineCount(text: string) {
+    return text.split(/\r?\n/).length;
+  }
+
+  // Função para determinar classe de tamanho de fonte
+  function getFontSizeClass(text: string) {
+    const lineCount = getLineCount(text);
+    if (lineCount >= 7) return 'font-xs'; // Muito grande
+    if (lineCount >= 5) return 'font-sm'; // Grande
+    if (lineCount >= 3) return 'font-md'; // Médio
+    return '';
+  }
+
   return (
     <div className="flashcard-container">
       <div 
@@ -31,7 +45,7 @@ const Flashcard: React.FC<FlashcardProps> = ({ card, onAnswer, isFlipped, onFlip
       >
         <div className="flashcard-inner">
           <div className="flashcard-front">
-            <h3>{card.front}</h3>
+            <h3 className={getFontSizeClass(card.front)}>{card.front}</h3>
             <p className="category">{card.category}</p>
             <p className="difficulty">Dificuldade: {card.difficulty}</p>
             <div className="flip-hint">
@@ -40,7 +54,7 @@ const Flashcard: React.FC<FlashcardProps> = ({ card, onAnswer, isFlipped, onFlip
             </div>
           </div>
           <div className="flashcard-back">
-            <h3>{card.back}</h3>
+            <h3 className={getFontSizeClass(card.back)}>{card.back}</h3>
             <div className="answer-buttons">
               <button 
                 className="answer-btn incorrect"

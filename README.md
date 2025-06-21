@@ -1,82 +1,68 @@
-# �� Flashcards App
+# 📚 Flashcards & Quiz App
 
-Um aplicativo moderno de flashcards desenvolvido em React com TypeScript, projetado para facilitar o aprendizado e memorização através de cartões de estudo interativos.
+Um aplicativo moderno de flashcards e quizzes, construído com React, TypeScript e Supabase.
 
 ## ✨ Funcionalidades
 
-- **Criação e Edição de Baralhos**: Interface intuitiva para criar e editar baralhos de flashcards
-- **Sessões de Estudo**: Sistema de estudo com cartões que podem ser virados
-- **Importação de Dados**: Suporte para importar baralhos via arquivos JSON ou TXT
-- **Estatísticas de Aprendizado**: Acompanhe seu progresso com métricas detalhadas
-- **Persistência de Dados**: Integração com Supabase para armazenamento na nuvem
-- **Fallback Local**: Funciona offline usando localStorage quando Supabase não está configurado
-- **Design Responsivo**: Interface moderna e adaptável a diferentes dispositivos
+### 📖 Flashcards
+- Criar e gerenciar baralhos de flashcards
+- Estudo interativo com cartas que viram
+- Estatísticas de progresso
+- Importação de baralhos via CSV/JSON
+- Categorização e níveis de dificuldade
 
-## 🚀 Tecnologias
+### 📝 Quiz
+- Criar quizzes com múltipla escolha
+- Configurar tempo limite e nota de aprovação
+- Adicionar explicações para respostas
+- Categorizar questões por tema
+- Importação via JSON com preview
+- Resultados detalhados com estatísticas
+- Navegação entre questões
+- Timer com avisos visuais
 
-- **React 18** com TypeScript
-- **Vite** para build e desenvolvimento
-- **Supabase** para backend e banco de dados
-- **Lucide React** para ícones
-- **CSS3** com design moderno e responsivo
+### ☁️ Armazenamento em Nuvem
+- Sincronização automática com Supabase
+- Backup seguro dos dados
+- Acesso de qualquer dispositivo
 
-## 📦 Instalação
+## 🚀 Como Usar
 
-1. Clone o repositório:
+### 1. Configuração do Supabase
+
+1. Crie uma conta no [Supabase](https://supabase.com)
+2. Crie um novo projeto
+3. Execute os comandos SQL do arquivo `supabase-setup.md` no SQL Editor
+4. Copie as credenciais do projeto (Settings > API)
+
+### 2. Configuração Local
+
 ```bash
+# Clone o repositório
 git clone <url-do-repositorio>
 cd Flashcards
-```
 
-2. Instale as dependências:
-```bash
+# Instale as dependências
 npm install
-```
 
-3. Configure o Supabase (opcional):
-   - Siga o guia em `supabase-setup.md`
-   - Crie um arquivo `.env` com suas credenciais do Supabase
+# Configure as variáveis de ambiente
+cp config.env .env
+# Edite o arquivo .env com suas credenciais do Supabase
 
-4. Execute o projeto:
-```bash
+# Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
-## 🔧 Configuração do Supabase
+### 3. Variáveis de Ambiente
 
-Para usar o Supabase como backend:
+Crie um arquivo `.env` na raiz do projeto:
 
-1. Crie um projeto no [Supabase](https://supabase.com)
-2. Execute os comandos SQL fornecidos em `supabase-setup.md`
-3. Configure as variáveis de ambiente no arquivo `.env`:
 ```env
-VITE_SUPABASE_URL=sua_url_do_supabase
-VITE_SUPABASE_ANON_KEY=sua_chave_anonima
+VITE_SUPABASE_URL=sua_project_url_aqui
+VITE_SUPABASE_ANON_KEY=sua_anon_key_aqui
 ```
 
-**Nota**: Se o Supabase não estiver configurado, o app funcionará usando localStorage como fallback.
-
-## 📖 Como Usar
-
-### Criando um Baralho
-1. Clique em "Novo Baralho"
-2. Preencha o nome e descrição
-3. Adicione cards com frente e verso
-4. Salve o baralho
-
-### Estudando
-1. Selecione um baralho da lista
-2. Clique em "Estudar"
-3. Clique no card para virá-lo
-4. Use os botões "Acertei", "Errei" ou "Pular"
-5. Acompanhe seu progresso em tempo real
-
-### Importando Baralhos
-1. Clique em "Importar"
-2. Escolha um arquivo JSON ou TXT
-3. O baralho será adicionado automaticamente
-
-## 🗂️ Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
 ```
 src/
@@ -84,70 +70,127 @@ src/
 │   ├── DeckList.tsx    # Lista de baralhos
 │   ├── DeckEditor.tsx  # Editor de baralhos
 │   ├── StudySession.tsx # Sessão de estudo
-│   └── ImportModal.tsx # Modal de importação
-├── services/           # Serviços
-│   └── supabaseService.ts # Integração com Supabase
-├── lib/               # Configurações
-│   └── supabase.ts    # Cliente Supabase
-├── types/             # Definições de tipos
-│   └── index.ts       # Tipos TypeScript
-└── App.tsx           # Componente principal
+│   ├── QuizList.tsx    # Lista de quizzes
+│   ├── QuizEditor.tsx  # Editor de quizzes
+│   ├── QuizSession.tsx # Execução do quiz
+│   ├── ImportModal.tsx # Importação de flashcards
+│   └── QuizImportModal.tsx # Importação de quizzes
+├── services/
+│   └── supabaseService.ts # Serviços do Supabase
+├── types.ts            # Definições de tipos
+└── App.tsx             # Componente principal
 ```
 
-## 📊 Funcionalidades Avançadas
+## 🎯 Como Usar
 
-### Estatísticas de Aprendizado
-- Contagem de revisões por card
-- Taxa de acerto individual
-- Progresso geral da sessão
+### Flashcards
 
-### Sistema de Dificuldade
-- Cards podem ser marcados como fácil, médio ou difícil
-- Acompanhamento de performance por nível
+1. **Criar um Baralho**: Clique em "Novo Deck" e adicione cartas
+2. **Estudar**: Selecione um baralho e clique em "Estudar"
+3. **Importar**: Use o botão "Importar" para carregar baralhos existentes
 
-### Persistência Inteligente
-- Sincronização automática com Supabase
-- Fallback para localStorage quando offline
-- Indicador visual do tipo de armazenamento
+### Quiz
 
-## 🔒 Segurança
+1. **Navegar para Quiz**: Clique no botão "📝 Quiz" no cabeçalho
+2. **Criar Quiz**: Clique em "Novo Quiz" para criar um novo
+3. **Configurar Quiz**: Defina título, descrição, tempo limite e nota mínima
+4. **Adicionar Questões**: Crie questões de múltipla escolha
+5. **Configurar Alternativas**: Defina as alternativas e marque a correta
+6. **Adicionar Explicações**: Inclua explicações opcionais
+7. **Fazer Quiz**: Clique em "Fazer Quiz" para iniciar
+8. **Ver Resultados**: Analise os resultados detalhados
 
-- Row Level Security (RLS) configurado no Supabase
-- Políticas de acesso por usuário
-- Validação de dados no frontend e backend
+## 📊 Formatos de Importação
 
-## 🎨 Design
+### Flashcards (CSV)
+```csv
+front,back,category,difficulty
+"Pergunta 1","Resposta 1","Geral","fácil"
+"Pergunta 2","Resposta 2","História","médio"
+```
 
-- Interface moderna com gradientes e sombras
-- Animações suaves e transições
-- Design responsivo para mobile e desktop
-- Tema consistente em todo o app
+### Quiz (JSON)
+```json
+{
+  "title": "Quiz de Conhecimentos Gerais",
+  "description": "Um quiz com questões variadas",
+  "timeLimit": 15,
+  "passingScore": 70,
+  "questions": [
+    {
+      "question": "Qual é a capital do Brasil?",
+      "alternatives": [
+        "São Paulo",
+        "Rio de Janeiro", 
+        "Brasília",
+        "Salvador"
+      ],
+      "correctAnswer": "Brasília",
+      "explanation": "Brasília foi inaugurada em 1960",
+      "category": "Geografia",
+      "difficulty": "fácil"
+    }
+  ]
+}
+```
 
-## 📱 Responsividade
+**Exemplo completo**: Veja `examples/quiz-example.json`
 
-O app é totalmente responsivo e funciona bem em:
-- Desktops e laptops
-- Tablets
-- Smartphones
+## 🛠️ Tecnologias
+
+- **Frontend**: React 18, TypeScript, Vite
+- **Backend**: Supabase (PostgreSQL, Auth, Storage)
+- **Estilização**: CSS3 com design responsivo
+- **Deploy**: Vercel, Netlify ou similar
+
+## 🔧 Desenvolvimento
+
+```bash
+# Instalar dependências
+npm install
+
+# Executar em modo desenvolvimento
+npm run dev
+
+# Build para produção
+npm run build
+
+# Preview do build
+npm run preview
+```
+
+## 📝 Scripts Disponíveis
+
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Cria o build de produção
+- `npm run preview` - Preview do build de produção
+- `npm run lint` - Executa o linter
 
 ## 🚀 Deploy
 
-Para fazer deploy:
+### Vercel (Recomendado)
+1. Conecte seu repositório ao Vercel
+2. Configure as variáveis de ambiente
+3. Deploy automático
 
-1. Build do projeto:
-```bash
-npm run build
-```
+### Netlify
+1. Conecte seu repositório ao Netlify
+2. Configure as variáveis de ambiente
+3. Deploy automático
 
-2. Os arquivos estarão em `dist/`
-3. Faça upload para seu serviço de hospedagem preferido
+## 🔒 Segurança
 
-## 🤝 Contribuindo
+- Todas as operações são validadas no frontend e backend
+- Dados são armazenados de forma segura no Supabase
+- Políticas de segurança configuráveis
+- Backup automático dos dados
 
-1. Fork o projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
+## 🤝 Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
 ## 📄 Licença
@@ -159,9 +202,12 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 Se você encontrar algum problema ou tiver dúvidas:
 
 1. Verifique se o Supabase está configurado corretamente
-2. Consulte o arquivo `supabase-setup.md`
-3. Abra uma issue no repositório
+2. Confirme se as variáveis de ambiente estão definidas
+3. Verifique os logs do console do navegador
+4. Abra uma issue no GitHub
 
----
+## 🎉 Agradecimentos
 
-**Desenvolvido com ❤️ para facilitar o aprendizado** 
+- Supabase pela infraestrutura
+- React e TypeScript pelas ferramentas
+- Comunidade open source pelo suporte 

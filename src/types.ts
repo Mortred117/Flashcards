@@ -2,9 +2,8 @@ export interface Flashcard {
   id: string;
   front: string;
   back: string;
-  category: string;
-  difficulty: 'fácil' | 'médio' | 'difícil';
-  lastReviewed?: Date;
+  category?: string;
+  difficulty?: 'fácil' | 'médio' | 'difícil';
   reviewCount: number;
   correctAnswers: number;
 }
@@ -12,7 +11,7 @@ export interface Flashcard {
 export interface Deck {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   cards: Flashcard[];
   createdAt: Date;
   updatedAt: Date;

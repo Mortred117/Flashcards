@@ -1,19 +1,20 @@
-import { supabase } from '../lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import { Deck, Flashcard } from '../types';
 
-// ID do usuário temporário (será substituído por autenticação real)
-const TEMP_USER_ID = 'temp-user';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://lvbjizngjulqxuldawwl.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2Ymppem5nanVscXh1bGRhd3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwMzY1NDksImV4cCI6MjA2NTYxMjU0OX0.b5_k9hBXUZKSnZlgYg27QLloXv_bQAZZOLITowlPxIY';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export class SupabaseService {
   // ===== DECKS =====
-  
-  // Buscar todos os decks do usuário
+
+  // Buscar todos os decks
   static async getDecks(): Promise<Deck[]> {
     try {
       const { data: decksData, error: decksError } = await supabase
         .from('decks')
         .select('*')
-        .eq('user_id', TEMP_USER_ID)
         .order('created_at', { ascending: false });
 
       if (decksError) throw decksError;
@@ -65,14 +66,14 @@ export class SupabaseService {
   static async createDeck(deck: Omit<Deck, 'id' | 'createdAt' | 'updatedAt'>): Promise<Deck | null> {
     try {
       const now = new Date().toISOString();
-      
-      // Inserir deck
+
+      // Criar deck
       const { data: deckData, error: deckError } = await supabase
         .from('decks')
         .insert({
           name: deck.name,
           description: deck.description,
-          user_id: TEMP_USER_ID,
+          user_id: 'temp-user',
           created_at: now,
           updated_at: now,
         })
@@ -81,7 +82,7 @@ export class SupabaseService {
 
       if (deckError) throw deckError;
 
-      // Inserir cards
+      // Criar cards
       if (deck.cards.length > 0) {
         const cardsToInsert = deck.cards.map(card => ({
           deck_id: deckData.id,
@@ -198,9 +199,7 @@ export class SupabaseService {
     }
   }
 
-  // ===== CARDS =====
-
-  // Atualizar estatísticas de um card
+  // Atualizar estatísticas de um card (exemplo)
   static async updateCardStats(cardId: string, reviewCount: number, correctAnswers: number): Promise<boolean> {
     try {
       const { error } = await supabase
@@ -208,7 +207,6 @@ export class SupabaseService {
         .update({
           review_count: reviewCount,
           correct_answers: correctAnswers,
-          updated_at: new Date().toISOString(),
         })
         .eq('id', cardId);
 
@@ -220,36 +218,7 @@ export class SupabaseService {
     }
   }
 
-  // ===== UTILITÁRIOS =====
-
-  // Verificar se o Supabase está configurado
   static isConfigured(): boolean {
-    return !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
-  }
-
-  // Fallback para localStorage quando Supabase não está configurado
-  static getFallbackDecks(): Deck[] {
-    try {
-      const savedDecks = localStorage.getItem('flashcards-decks');
-      if (savedDecks) {
-        const parsedDecks = JSON.parse(savedDecks).map((deck: any) => ({
-          ...deck,
-          createdAt: new Date(deck.createdAt),
-          updatedAt: new Date(deck.updatedAt),
-        }));
-        return parsedDecks;
-      }
-    } catch (error) {
-      console.error('Erro ao carregar dados do localStorage:', error);
-    }
-    return [];
-  }
-
-  static saveFallbackDecks(decks: Deck[]): void {
-    try {
-      localStorage.setItem('flashcards-decks', JSON.stringify(decks));
-    } catch (error) {
-      console.error('Erro ao salvar dados no localStorage:', error);
-    }
+    return !!import.meta.env.VITE_SUPABASE_URL && !!import.meta.env.VITE_SUPABASE_ANON_KEY;
   }
 } 
