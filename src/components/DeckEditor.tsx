@@ -15,7 +15,7 @@ const DeckEditor: React.FC<DeckEditorProps> = ({ deck, onSave, onCancel }) => {
   useEffect(() => {
     if (deck) {
       setName(deck.name);
-      setDescription(deck.description);
+      setDescription(deck.description || '');
       setCards([...deck.cards]);
     }
   }, [deck]);
