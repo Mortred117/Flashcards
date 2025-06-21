@@ -199,18 +199,33 @@ export class SupabaseService {
     }
   }
 
-  // Atualizar estatísticas de um card (exemplo)
-  static async updateCardStats(cardId: string, reviewCount: number, correctAnswers: number): Promise<boolean> {
+  // Atualizar estatísticas de um card (VERSÃO ALTERNATIVA)
+  static async updateCardStats(cardId: string, isCorrect: boolean): Promise<boolean> {
     try {
-      const { error } = await supabase
+      // Primeiro, buscar o card atual
+      const { data: currentCard, error: fetchError } = await supabase
+        .from('cards')
+        .select('review_count, correct_answers')
+        .eq('id', cardId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Calcular novos valores
+      const newReviewCount = (currentCard.review_count || 0) + 1;
+      const newCorrectAnswers = (currentCard.correct_answers || 0) + (isCorrect ? 1 : 0);
+
+      // Atualizar com os novos valores
+      const { error: updateError } = await supabase
         .from('cards')
         .update({
-          review_count: reviewCount,
-          correct_answers: correctAnswers,
+          review_count: newReviewCount,
+          correct_answers: newCorrectAnswers,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', cardId);
 
-      if (error) throw error;
+      if (updateError) throw updateError;
       return true;
     } catch (error) {
       console.error('Erro ao atualizar estatísticas do card:', error);

@@ -43,9 +43,9 @@ const StudySession: React.FC<StudySessionProps> = ({ deck, onBack }) => {
         : c
     ));
 
-    // Salvar no Supabase se estiver configurado
+    // Salvar no Supabase com a nova lógica
     if (SupabaseService.isConfigured()) {
-      await SupabaseService.updateCardStats(cardId, newReviewCount, newCorrectAnswers);
+      await SupabaseService.updateCardStats(cardId, isCorrect);
     }
   };
 
