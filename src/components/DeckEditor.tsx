@@ -33,9 +33,9 @@ const DeckEditor: React.FC<DeckEditorProps> = ({ deck, onSave, onCancel }) => {
     setCards([...cards, newCard]);
   };
 
-  const handleUpdateCard = (index: number, field: keyof Flashcard, value: string) => {
+  const handleUpdateCard = (index: number, field: keyof Flashcard, value: string | undefined) => {
     const updatedCards = [...cards];
-    updatedCards[index] = { ...updatedCards[index], [field]: value };
+    updatedCards[index] = { ...updatedCards[index], [field]: value || '' };
     setCards(updatedCards);
   };
 

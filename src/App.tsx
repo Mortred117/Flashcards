@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { Deck } from './types';
 import { SupabaseService } from './services/supabaseService';
